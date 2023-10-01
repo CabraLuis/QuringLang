@@ -50,6 +50,7 @@ namespace QuringLang
 
         private void ConnectGrammar()
         {
+            // Se debe colocar el archivo de la matriz para grámaticas llamado Grammar.xlsx en una carpeta llamada QurinLang en la ruta raiz C:/
             string filePath = @"C:/QuringLang/Grammar.xlsx";
             string connection = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source={0};Extended Properties='Excel 8.0;HDR={1};IMEX={2}'";
             connection = string.Format(connection, filePath, "no", "1");
@@ -73,6 +74,7 @@ namespace QuringLang
             dtgErrors.Rows.Clear();
             Lexer();
             Syntax();
+            Semantic();
         }
 
         private void Lexer()
@@ -136,6 +138,14 @@ namespace QuringLang
                     }
                 }
             }
+
+            for (int i = 0; i < txtLexer.Lines.Length - 1; i++)
+            {
+                if (txtLexer.Lines[i].Contains("ERLEX"))
+                {
+                    dtgErrors.Rows.Add(i + 1, txtLexer.Lines[i], "ERROR LÉXICO");
+                }
+            }
         }
 
         // Se recorren las gramáticas de forma similar al léxico, explicar la función sería redundante
@@ -171,6 +181,48 @@ namespace QuringLang
                     }
                 }
             }
+        }
+
+        private void Semantic()
+        {
+            CheckParentheses();
+            CheckSymbols();
+        }
+
+        private void CheckParentheses()
+        {
+            for (int i = 0; i < txtLexer.Lines.Length - 1; i++)
+            {
+                Stack<string> parentheses = new Stack<string>();
+                string[] tokensByLine = txtLexer.Lines[i].Split(" ");
+                foreach (string token in tokensByLine)
+                {
+                    if (token == "CA-E(")
+                    {
+                        parentheses.Push(token);
+                    }
+                    else if (token == "CA-E)")
+                    {
+                        if (parentheses.Count <= 0)
+                        {
+                            dtgErrors.Rows.Add(i + 1, "BALANCE DE PARENTÉSIS", "EXCESO DE PARÉNTESIS DE CIERRE");
+                            break;
+                        }
+
+                        parentheses.Pop();
+                    }
+                }
+                if (parentheses.Count > 0)
+                {
+                    dtgErrors.Rows.Add(i + 1, "BALANCE DE PARENTÉSIS", "EXCESO DE PARÉNTESIS DE APERTURA");
+                    continue;
+                }
+            }
+        }
+
+        private void CheckSymbols()
+        {
+
         }
 
         private void AddSymbol(string type, string name, string value)
