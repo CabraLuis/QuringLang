@@ -121,7 +121,7 @@ namespace QuringLang
                                 {
                                     if (src[k] == "=")
                                     {
-                                        AddSymbol(type, src[k - 1], src[k + 1]);
+                                        AddSymbol(i+1, type, src[k - 1], src[k + 1]);
                                     }
                                 }
                             }
@@ -143,7 +143,8 @@ namespace QuringLang
             {
                 if (txtLexer.Lines[i].Contains("ERLEX"))
                 {
-                    dtgErrors.Rows.Add(i + 1, txtLexer.Lines[i], "ERROR LÉXICO");
+                    int line = i + 1;
+                    AddError(line.ToString(), "ERLEX", "ERROR LÉXICO");
                 }
             }
         }
@@ -195,6 +196,7 @@ namespace QuringLang
             {
                 Stack<string> parentheses = new Stack<string>();
                 string[] tokensByLine = txtLexer.Lines[i].Split(" ");
+                int line = i + 1;
                 foreach (string token in tokensByLine)
                 {
                     if (token == "CA-E(")
@@ -205,7 +207,7 @@ namespace QuringLang
                     {
                         if (parentheses.Count <= 0)
                         {
-                            dtgErrors.Rows.Add(i + 1, "BALANCE DE PARENTÉSIS", "EXCESO DE PARÉNTESIS DE CIERRE");
+                            AddError(line.ToString(), "BALANCE DE PARENTÉSIS", "EXCESO DE PARÉNTESIS DE CIERRE");
                             break;
                         }
 
@@ -214,7 +216,7 @@ namespace QuringLang
                 }
                 if (parentheses.Count > 0)
                 {
-                    dtgErrors.Rows.Add(i + 1, "BALANCE DE PARENTÉSIS", "EXCESO DE PARÉNTESIS DE APERTURA");
+                    AddError(line.ToString(), "BALANCE DE PARENTÉSIS", "EXCESO DE PARÉNTESIS DE APERTURA");
                     continue;
                 }
             }
@@ -222,15 +224,58 @@ namespace QuringLang
 
         private void CheckSymbols()
         {
+            foreach (DataGridViewRow row in dtgSymbols.Rows)
+            {
+                string line = row.Cells[0].Value.ToString();
+                string type = row.Cells[1].Value.ToString();
+                string name = row.Cells[2].Value.ToString();
+                string value = row.Cells[3].Value.ToString();
 
+                if (type == "INT")
+                {
+                    if (int.TryParse(value, out int esEntero))
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        AddError(line, "TIPO INCOMPATIBLE", $"{name} ESPERABA VALOR ENTERO");
+                    }
+                } else if (type == "DBL")
+                {
+                    if (double.TryParse(value, out double esDecimal))
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        AddError(line, "TIPO INCOMPATIBLE", $"{name} ESPERABA VALOR DECIMAL");
+                    }
+                } else if (type == "STR")
+                {
+                    if (int.TryParse(value, out int esEntero1) || double.TryParse(value, out double esDecimal1))
+                    {
+                        AddError(line, "TIPO INCOMPATIBLE", $"{name} ESPERABA UNA CADENA");
+                    }
+                    else
+                    {
+                        continue;
+
+                    }
+                }
+            }
         }
 
-        private void AddSymbol(string type, string name, string value)
+        private void AddSymbol(int line,string type, string name, string value)
         {
 
-            dtgSymbols.Rows.Add(type, name, value);
+            dtgSymbols.Rows.Add(line, type, name, value);
         }
 
+        private void AddError(string line, string type, string message)
+        {
+            dtgErrors.Rows.Add(line, type, message);
+        }
         // Controlar display de numero en las lineas de codigo
         // Este método no lo hice yo, utilicé y modifiqué:
         // https://www.c-sharpcorner.com/blogs/creating-line-numbers-for-richtextbox-in-c-sharp

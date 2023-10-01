@@ -57,6 +57,7 @@
             lblSyntaxOutput = new Label();
             picLogoQuring = new PictureBox();
             label1 = new Label();
+            lineSimbolo = new DataGridViewTextBoxColumn();
             tipo = new DataGridViewTextBoxColumn();
             nombreToken = new DataGridViewTextBoxColumn();
             valor = new DataGridViewTextBoxColumn();
@@ -241,7 +242,7 @@
             dataGridViewCellStyle6.WrapMode = DataGridViewTriState.True;
             dtgSymbols.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle6;
             dtgSymbols.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dtgSymbols.Columns.AddRange(new DataGridViewColumn[] { tipo, nombreToken, valor });
+            dtgSymbols.Columns.AddRange(new DataGridViewColumn[] { lineSimbolo, tipo, nombreToken, valor });
             dataGridViewCellStyle7.Alignment = DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle7.BackColor = SystemColors.Window;
             dataGridViewCellStyle7.Font = new Font("Consolas", 9F, FontStyle.Regular, GraphicsUnit.Point);
@@ -371,6 +372,14 @@
             label1.TabIndex = 24;
             label1.Text = "Líneas";
             // 
+            // lineSimbolo
+            // 
+            lineSimbolo.AutoSizeMode = DataGridViewAutoSizeColumnMode.ColumnHeader;
+            lineSimbolo.HeaderText = "Linea";
+            lineSimbolo.Name = "lineSimbolo";
+            lineSimbolo.ReadOnly = true;
+            lineSimbolo.Width = 67;
+            // 
             // tipo
             // 
             tipo.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
@@ -453,6 +462,7 @@
         private DataGridViewTextBoxColumn lineaError;
         private DataGridViewTextBoxColumn tipoError;
         private DataGridViewTextBoxColumn mensajeError;
+        private DataGridViewTextBoxColumn lineSimbolo;
         private DataGridViewTextBoxColumn tipo;
         private DataGridViewTextBoxColumn nombreToken;
         private DataGridViewTextBoxColumn valor;
