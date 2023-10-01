@@ -26,6 +26,7 @@ namespace QuringLang
             txtLines.Font = txtSourceCode.Font;
             txtSourceCode.Select();
             AddLineNumbers();
+
             ConnectLexer();
             ConnectGrammar();
         }
@@ -38,8 +39,8 @@ namespace QuringLang
             connection = string.Format(connection, filePath, "no", "1");
             OleDbConnection excelConnection = new OleDbConnection(connection);
             excelConnection.Open();
-            DataTable dtLexer = excelConnection.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
-            string excelSheet = dtLexer.Rows[0]["TABLE_NAME"].ToString();
+            DataTable? dtLexer = excelConnection.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
+            string? excelSheet = dtLexer.Rows[0]["TABLE_NAME"].ToString();
             OleDbCommand command = new OleDbCommand("SELECT * FROM [" + excelSheet + "]", excelConnection);
             OleDbDataAdapter oda = new OleDbDataAdapter(command);
             DataTable dt = new DataTable();
@@ -56,8 +57,8 @@ namespace QuringLang
             connection = string.Format(connection, filePath, "no", "1");
             OleDbConnection excelConnection = new OleDbConnection(connection);
             excelConnection.Open();
-            DataTable dtGrammar = excelConnection.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
-            string excelSheet = dtGrammar.Rows[0]["TABLE_NAME"].ToString();
+            DataTable? dtGrammar = excelConnection.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
+            string? excelSheet = dtGrammar.Rows[0]["TABLE_NAME"].ToString();
             OleDbCommand command = new OleDbCommand("SELECT * FROM [" + excelSheet + "]", excelConnection);
             OleDbDataAdapter oda = new OleDbDataAdapter(command);
             DataTable dt = new DataTable();
@@ -72,6 +73,7 @@ namespace QuringLang
             txtSyntax.Clear();
             dtgSymbols.Rows.Clear();
             dtgErrors.Rows.Clear();
+
             Lexer();
             Syntax();
             Semantic();
