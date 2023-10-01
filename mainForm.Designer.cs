@@ -29,12 +29,19 @@
         private void InitializeComponent()
         {
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle7 = new DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(mainForm));
             dtgLexer = new DataGridView();
             btnCompile = new Button();
-            btnClean = new Button();
-            dtgSymbolTable = new DataGridView();
+            dtgGrammars = new DataGridView();
             dtgErrors = new DataGridView();
+            tipoError = new DataGridViewTextBoxColumn();
+            mensajeError = new DataGridViewTextBoxColumn();
             lblLexer = new Label();
             lblSyntax = new Label();
             lblErrors = new Label();
@@ -51,8 +58,9 @@
             lblLexerOutput = new Label();
             lblSyntaxOutput = new Label();
             picLogoQuring = new PictureBox();
+            label1 = new Label();
             ((System.ComponentModel.ISupportInitialize)dtgLexer).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)dtgSymbolTable).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dtgGrammars).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dtgErrors).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dtgSymbols).BeginInit();
             ((System.ComponentModel.ISupportInitialize)picLogoQuring).BeginInit();
@@ -64,8 +72,24 @@
             dtgLexer.AllowUserToDeleteRows = false;
             dtgLexer.AllowUserToResizeColumns = false;
             dtgLexer.AllowUserToResizeRows = false;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = SystemColors.Control;
+            dataGridViewCellStyle1.Font = new Font("Consolas", 9F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+            dtgLexer.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             dtgLexer.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dtgLexer.ColumnHeadersVisible = false;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = SystemColors.Window;
+            dataGridViewCellStyle2.Font = new Font("Consolas", 9F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle2.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
+            dtgLexer.DefaultCellStyle = dataGridViewCellStyle2;
             dtgLexer.Location = new Point(12, 103);
             dtgLexer.Name = "dtgLexer";
             dtgLexer.ReadOnly = true;
@@ -76,48 +100,91 @@
             // 
             // btnCompile
             // 
+            btnCompile.BackColor = Color.FromArgb(173, 247, 182);
             btnCompile.Cursor = Cursors.Hand;
+            btnCompile.FlatAppearance.BorderColor = Color.FromArgb(45, 137, 139);
+            btnCompile.FlatAppearance.MouseDownBackColor = Color.FromArgb(45, 137, 139);
+            btnCompile.FlatAppearance.MouseOverBackColor = Color.FromArgb(45, 137, 139);
+            btnCompile.FlatStyle = FlatStyle.Flat;
             btnCompile.Font = new Font("Consolas", 14.25F, FontStyle.Bold, GraphicsUnit.Point);
-            btnCompile.Location = new Point(498, 12);
+            btnCompile.Image = Properties.Resources.play;
+            btnCompile.ImageAlign = ContentAlignment.MiddleLeft;
+            btnCompile.Location = new Point(12, 12);
             btnCompile.Name = "btnCompile";
             btnCompile.Size = new Size(336, 49);
             btnCompile.TabIndex = 2;
             btnCompile.Text = "Compilar";
-            btnCompile.UseVisualStyleBackColor = true;
+            btnCompile.TextAlign = ContentAlignment.MiddleRight;
+            btnCompile.TextImageRelation = TextImageRelation.TextBeforeImage;
+            btnCompile.UseVisualStyleBackColor = false;
             btnCompile.Click += btnCompile_Click;
             // 
-            // btnClean
+            // dtgGrammars
             // 
-            btnClean.Cursor = Cursors.Hand;
-            btnClean.Font = new Font("Consolas", 14.25F, FontStyle.Bold, GraphicsUnit.Point);
-            btnClean.Location = new Point(991, 12);
-            btnClean.Name = "btnClean";
-            btnClean.Size = new Size(336, 49);
-            btnClean.TabIndex = 3;
-            btnClean.Text = "Limpiar";
-            btnClean.UseVisualStyleBackColor = true;
-            // 
-            // dtgSymbolTable
-            // 
-            dtgSymbolTable.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dtgSymbolTable.Location = new Point(12, 318);
-            dtgSymbolTable.Name = "dtgSymbolTable";
-            dtgSymbolTable.ReadOnly = true;
-            dtgSymbolTable.RowHeadersVisible = false;
-            dtgSymbolTable.RowTemplate.Height = 25;
-            dtgSymbolTable.Size = new Size(336, 172);
-            dtgSymbolTable.TabIndex = 5;
+            dtgGrammars.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dtgGrammars.ColumnHeadersVisible = false;
+            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = SystemColors.Window;
+            dataGridViewCellStyle3.Font = new Font("Consolas", 9F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle3.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.False;
+            dtgGrammars.DefaultCellStyle = dataGridViewCellStyle3;
+            dtgGrammars.Location = new Point(12, 318);
+            dtgGrammars.Name = "dtgGrammars";
+            dtgGrammars.ReadOnly = true;
+            dtgGrammars.RowHeadersVisible = false;
+            dtgGrammars.RowTemplate.Height = 25;
+            dtgGrammars.Size = new Size(336, 172);
+            dtgGrammars.TabIndex = 5;
             // 
             // dtgErrors
             // 
+            dtgErrors.AllowUserToAddRows = false;
+            dtgErrors.AllowUserToDeleteRows = false;
+            dtgErrors.AllowUserToResizeColumns = false;
+            dtgErrors.AllowUserToResizeRows = false;
+            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle4.BackColor = SystemColors.Control;
+            dataGridViewCellStyle4.Font = new Font("Consolas", 9F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle4.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle4.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle4.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle4.WrapMode = DataGridViewTriState.True;
+            dtgErrors.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
             dtgErrors.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dtgErrors.Columns.AddRange(new DataGridViewColumn[] { tipoError, mensajeError });
+            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle5.BackColor = SystemColors.Window;
+            dataGridViewCellStyle5.Font = new Font("Consolas", 9F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle5.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle5.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle5.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle5.WrapMode = DataGridViewTriState.False;
+            dtgErrors.DefaultCellStyle = dataGridViewCellStyle5;
             dtgErrors.Location = new Point(12, 515);
             dtgErrors.Name = "dtgErrors";
             dtgErrors.ReadOnly = true;
             dtgErrors.RowHeadersVisible = false;
+            dtgErrors.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             dtgErrors.RowTemplate.Height = 25;
             dtgErrors.Size = new Size(543, 150);
             dtgErrors.TabIndex = 8;
+            // 
+            // tipoError
+            // 
+            tipoError.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            tipoError.HeaderText = "Tipo";
+            tipoError.Name = "tipoError";
+            tipoError.ReadOnly = true;
+            // 
+            // mensajeError
+            // 
+            mensajeError.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            mensajeError.HeaderText = "Mensaje";
+            mensajeError.Name = "mensajeError";
+            mensajeError.ReadOnly = true;
             // 
             // lblLexer
             // 
@@ -156,16 +223,24 @@
             dtgSymbols.AllowUserToOrderColumns = true;
             dtgSymbols.AllowUserToResizeColumns = false;
             dtgSymbols.AllowUserToResizeRows = false;
-            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle1.BackColor = SystemColors.Control;
-            dataGridViewCellStyle1.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
-            dtgSymbols.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle6.BackColor = SystemColors.Control;
+            dataGridViewCellStyle6.Font = new Font("Consolas", 9F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle6.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle6.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle6.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle6.WrapMode = DataGridViewTriState.True;
+            dtgSymbols.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle6;
             dtgSymbols.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dtgSymbols.Columns.AddRange(new DataGridViewColumn[] { tipo, token, valor });
+            dataGridViewCellStyle7.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle7.BackColor = SystemColors.Window;
+            dataGridViewCellStyle7.Font = new Font("Consolas", 9F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle7.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle7.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle7.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle7.WrapMode = DataGridViewTriState.False;
+            dtgSymbols.DefaultCellStyle = dataGridViewCellStyle7;
             dtgSymbols.Location = new Point(561, 515);
             dtgSymbols.Name = "dtgSymbols";
             dtgSymbols.ReadOnly = true;
@@ -214,6 +289,9 @@
             txtSourceCode.Size = new Size(322, 387);
             txtSourceCode.TabIndex = 16;
             txtSourceCode.Text = "";
+            txtSourceCode.SelectionChanged += txtSourceCode_SelectionChanged;
+            txtSourceCode.VScroll += txtSourceCode_VScroll;
+            txtSourceCode.FontChanged += txtSourceCode_FontChanged;
             txtSourceCode.TextChanged += txtSourceCode_TextChanged;
             // 
             // txtLexer
@@ -228,6 +306,7 @@
             // 
             // txtSyntax
             // 
+            txtSyntax.BackColor = SystemColors.Control;
             txtSyntax.Font = new Font("Consolas", 12F, FontStyle.Regular, GraphicsUnit.Point);
             txtSyntax.Location = new Point(1030, 103);
             txtSyntax.Name = "txtSyntax";
@@ -239,13 +318,17 @@
             // txtLines
             // 
             txtLines.BorderStyle = BorderStyle.None;
+            txtLines.Cursor = Cursors.NoMoveHoriz;
             txtLines.Font = new Font("Consolas", 12F, FontStyle.Regular, GraphicsUnit.Point);
             txtLines.Location = new Point(354, 103);
             txtLines.Name = "txtLines";
             txtLines.ReadOnly = true;
+            txtLines.ScrollBars = RichTextBoxScrollBars.None;
             txtLines.Size = new Size(47, 387);
             txtLines.TabIndex = 19;
             txtLines.Text = "";
+            txtLines.WordWrap = false;
+            txtLines.MouseDown += txtLines_MouseDown;
             // 
             // lblSourceCode
             // 
@@ -280,18 +363,30 @@
             // picLogoQuring
             // 
             picLogoQuring.Image = Properties.Resources.quring;
-            picLogoQuring.Location = new Point(12, 12);
+            picLogoQuring.Location = new Point(591, 12);
             picLogoQuring.Name = "picLogoQuring";
             picLogoQuring.Size = new Size(233, 49);
             picLogoQuring.SizeMode = PictureBoxSizeMode.Zoom;
             picLogoQuring.TabIndex = 23;
             picLogoQuring.TabStop = false;
             // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Font = new Font("Consolas", 8.25F, FontStyle.Bold, GraphicsUnit.Point);
+            label1.Location = new Point(350, 87);
+            label1.Name = "label1";
+            label1.Size = new Size(43, 13);
+            label1.TabIndex = 24;
+            label1.Text = "Líneas";
+            // 
             // mainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1339, 692);
+            BackColor = SystemColors.Control;
+            ClientSize = new Size(1339, 673);
+            Controls.Add(label1);
             Controls.Add(picLogoQuring);
             Controls.Add(lblSyntaxOutput);
             Controls.Add(lblLexerOutput);
@@ -306,17 +401,17 @@
             Controls.Add(lblSyntax);
             Controls.Add(lblLexer);
             Controls.Add(dtgErrors);
-            Controls.Add(dtgSymbolTable);
-            Controls.Add(btnClean);
+            Controls.Add(dtgGrammars);
             Controls.Add(btnCompile);
             Controls.Add(dtgLexer);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "mainForm";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Quring Compiler";
             Load += mainForm_Load;
             ((System.ComponentModel.ISupportInitialize)dtgLexer).EndInit();
-            ((System.ComponentModel.ISupportInitialize)dtgSymbolTable).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dtgGrammars).EndInit();
             ((System.ComponentModel.ISupportInitialize)dtgErrors).EndInit();
             ((System.ComponentModel.ISupportInitialize)dtgSymbols).EndInit();
             ((System.ComponentModel.ISupportInitialize)picLogoQuring).EndInit();
@@ -327,8 +422,7 @@
         #endregion
         private DataGridView dtgLexer;
         private Button btnCompile;
-        private Button btnClean;
-        private DataGridView dtgSymbolTable;
+        private DataGridView dtgGrammars;
         private DataGridView dtgErrors;
         private Label lblLexer;
         private Label lblSyntax;
@@ -346,5 +440,8 @@
         private Label lblLexerOutput;
         private Label lblSyntaxOutput;
         private PictureBox picLogoQuring;
+        private Label label1;
+        private DataGridViewTextBoxColumn tipoError;
+        private DataGridViewTextBoxColumn mensajeError;
     }
 }
