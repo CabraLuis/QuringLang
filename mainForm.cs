@@ -83,6 +83,7 @@ namespace QuringLang
         {
             for (int i = 0; i < txtSourceCode.Lines.Length; i++)
             {
+                // Separar lineas de codigo fuente para analizar simbolos
                 string[] src = txtSourceCode.Lines[i].Split(" ");
                 // El símbolo "°" no se utiliza en ningún momento, entonces lo asignamos como fin de línea, esto para hacer las salidas más legibles
                 string line = txtSourceCode.Lines[i] + " " + "°";
@@ -109,6 +110,7 @@ namespace QuringLang
                             string token = dtgLexer.Rows[state].Cells[dtgLexer.ColumnCount - 1].Value.ToString();
                             txtLexer.AppendText(token + " ");
 
+                            // Agregar tokens a tabla de simbolos
                             switch (token)
                             {
                                 case "PR-12": type = "INT"; break;
@@ -119,11 +121,16 @@ namespace QuringLang
 
                             if (type == "INT" || type == "DBL" || type == "STR")
                             {
+                                // Se recorre cada linea del codigo fuente
                                 for (int k = 0; k < src.Length; k++)
                                 {
+                                    // Si se encuentra un operado de asignación se agrega a la tabla de simbolos
+                                    // i + 1 es la linea de codigo donde se encontró el simbolo
+                                    // src[k - 1] es el nombre del simbolo
+                                    // src[k + 1] es el valor del simbolo
                                     if (src[k] == "=")
                                     {
-                                        AddSymbol(i+1, type, src[k - 1], src[k + 1]);
+                                        AddSymbol(i + 1, type, src[k - 1], src[k + 1]);
                                     }
                                 }
                             }
@@ -143,6 +150,7 @@ namespace QuringLang
 
             for (int i = 0; i < txtLexer.Lines.Length - 1; i++)
             {
+                // Si se encuentra un error léxico se agrega a la tabla de errores
                 if (txtLexer.Lines[i].Contains("ERLEX"))
                 {
                     int line = i + 1;
@@ -186,6 +194,7 @@ namespace QuringLang
             }
         }
 
+        // Analizador semantico básico, revisa parentesis y simbolos con tipos de datos validos
         private void Semantic()
         {
             CheckParentheses();
@@ -196,7 +205,9 @@ namespace QuringLang
         {
             for (int i = 0; i < txtLexer.Lines.Length - 1; i++)
             {
+                // Pila para hacer el analisis de parentesis
                 Stack<string> parentheses = new Stack<string>();
+                // Separar los tokens de cada linea
                 string[] tokensByLine = txtLexer.Lines[i].Split(" ");
                 int line = i + 1;
                 foreach (string token in tokensByLine)
@@ -209,6 +220,7 @@ namespace QuringLang
                     {
                         if (parentheses.Count <= 0)
                         {
+                            // ( ) )
                             AddError(line.ToString(), "BALANCE DE PARENTÉSIS", "EXCESO DE PARÉNTESIS DE CIERRE");
                             break;
                         }
@@ -218,6 +230,7 @@ namespace QuringLang
                 }
                 if (parentheses.Count > 0)
                 {
+                    // ( ( )
                     AddError(line.ToString(), "BALANCE DE PARENTÉSIS", "EXCESO DE PARÉNTESIS DE APERTURA");
                     continue;
                 }
@@ -241,6 +254,7 @@ namespace QuringLang
                     }
                     else
                     {
+                        // int var = 2.2 || int var = 'cadena'
                         AddError(line, "TIPO INCOMPATIBLE", $"{name} ESPERABA VALOR ENTERO");
                     }
                 } else if (type == "DBL")
@@ -251,12 +265,14 @@ namespace QuringLang
                     }
                     else
                     {
+                        // dbl var = 2 || dbl var = 'cadena'
                         AddError(line, "TIPO INCOMPATIBLE", $"{name} ESPERABA VALOR DECIMAL");
                     }
                 } else if (type == "STR")
                 {
                     if (int.TryParse(value, out int esEntero1) || double.TryParse(value, out double esDecimal1))
                     {
+                        // str var = 2.2 || str var = 2
                         AddError(line, "TIPO INCOMPATIBLE", $"{name} ESPERABA UNA CADENA");
                     }
                     else
@@ -278,6 +294,7 @@ namespace QuringLang
         {
             dtgErrors.Rows.Add(line, type, message);
         }
+
         // Controlar display de numero en las lineas de codigo
         // Este método no lo hice yo, utilicé y modifiqué:
         // https://www.c-sharpcorner.com/blogs/creating-line-numbers-for-richtextbox-in-c-sharp
@@ -286,21 +303,21 @@ namespace QuringLang
             // Crear y establece punto pt a (0, 0)    
             Point pt = new Point(0, 0);
             // Obtiene el primer indice y primera linea de txtSourceCode
-            int First_Index = txtSourceCode.GetCharIndexFromPosition(pt);
-            int First_Line = txtSourceCode.GetLineFromCharIndex(First_Index);
+            int firstIndex = txtSourceCode.GetCharIndexFromPosition(pt);
+            int firstLine = txtSourceCode.GetLineFromCharIndex(firstIndex);
             // Establece coordenadas X y Y del punto pt al ancho y alto de ClientRectangle respectivamente
             pt.X = ClientRectangle.Width;
             pt.Y = ClientRectangle.Height;
             // Obtiene el ultimo indice y ultima linea de txtSourceCode    
-            int Last_Index = txtSourceCode.GetCharIndexFromPosition(pt);
-            int Last_Line = txtSourceCode.GetLineFromCharIndex(Last_Index);
+            int lastIndex = txtSourceCode.GetCharIndexFromPosition(pt);
+            int lastLine = txtSourceCode.GetLineFromCharIndex(lastIndex);
             // Establece alineación central a txtLines
             txtLines.SelectionAlignment = HorizontalAlignment.Center;
             // Establece el texto de txtLines a null y su ancho al valor retornado por getWidth()
             txtLines.Text = "";
             txtLines.Width = getWidth();
             // Agrega cada numero de linea a txtLines hasta llegar a la ultima linea
-            for (int i = First_Line; i <= Last_Line; i++)
+            for (int i = firstLine; i <= lastLine; i++)
             {
                 txtLines.Text += i + 1 + "\n";
             }
