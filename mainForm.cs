@@ -1,16 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using System.Data;
 using System.Data.OleDb;
-using System.Xml.Linq;
-using System.Text.RegularExpressions;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace QuringLang
 {
@@ -69,18 +58,26 @@ namespace QuringLang
 
         private void btnCompile_Click(object sender, EventArgs e)
         {
+            // Limpiar salida de analizador léxico
             txtLexer.Clear();
+            // Limpiar salida de analizador sintáctico
             txtSyntax.Clear();
+            // Limpiar tabla de símbolos
             dtgSymbols.Rows.Clear();
+            // Limpiar tabla de errores
             dtgErrors.Rows.Clear();
 
+            // Ejecutar analizador léxico
             Lexer();
+            // Ejecutar analizador sintáctico
             Syntax();
+            // Ejecutar analizador semántico
             Semantic();
         }
 
         private void Lexer()
         {
+            // Se recorre cada linea del código fuente
             for (int i = 0; i < txtSourceCode.Lines.Length; i++)
             {
                 // Separar lineas de codigo fuente para analizar simbolos
@@ -90,6 +87,7 @@ namespace QuringLang
                 char[] chars = line.ToCharArray();
                 // El estado inicia en 1 debido a que la fila 0 la ocupan los símbolos de la tabla
                 int state = 1;
+                // Variable para guardar el tipo de simbolo encontrado
                 string type;
                 foreach (char c in chars)
                 {
@@ -197,7 +195,9 @@ namespace QuringLang
         // Analizador semantico básico, revisa parentesis y simbolos con tipos de datos validos
         private void Semantic()
         {
+            // Revisar paréntesis
             CheckParentheses();
+            // Revisar símbolos
             CheckSymbols();
         }
 
@@ -207,27 +207,33 @@ namespace QuringLang
             {
                 // Pila para hacer el analisis de parentesis
                 Stack<string> parentheses = new Stack<string>();
-                // Separar los tokens de cada linea
+                // Separar los tokens CA-E( CA-E) de cada linea
                 string[] tokensByLine = txtLexer.Lines[i].Split(" ");
                 int line = i + 1;
+                // Recorrer lista de tokens en la linea
                 foreach (string token in tokensByLine)
                 {
+                    // Si encuentra apertura
                     if (token == "CA-E(")
                     {
+                        // Meter a la pila
                         parentheses.Push(token);
                     }
+                    // Si encuentra cierre
                     else if (token == "CA-E)")
                     {
+                        // Si no hay nada en la pila
                         if (parentheses.Count <= 0)
                         {
                             // ( ) )
                             AddError(line.ToString(), "BALANCE DE PARENTÉSIS", "EXCESO DE PARÉNTESIS DE CIERRE");
                             break;
                         }
-
+                        // Sacar ultimo token en la pila
                         parentheses.Pop();
                     }
                 }
+                // Si queda algo en la pila, no se encontro un parentesis de cierre
                 if (parentheses.Count > 0)
                 {
                     // ( ( )
@@ -239,17 +245,22 @@ namespace QuringLang
 
         private void CheckSymbols()
         {
+            // Recorrer filas de la tabla de símbolos
             foreach (DataGridViewRow row in dtgSymbols.Rows)
             {
+                // Guardar lineas, tipos, nombres y valores
                 string line = row.Cells[0].Value.ToString();
                 string type = row.Cells[1].Value.ToString();
                 string name = row.Cells[2].Value.ToString();
                 string value = row.Cells[3].Value.ToString();
 
+                // Si encuentra el tipo INT
                 if (type == "INT")
                 {
+                    // int.TryParse(value, out int esEntero) devuelve TRUE si el valor es entero
                     if (int.TryParse(value, out int esEntero))
                     {
+                        // Pasar a siguiente fila
                         continue;
                     }
                     else
@@ -257,26 +268,32 @@ namespace QuringLang
                         // int var = 2.2 || int var = 'cadena'
                         AddError(line, "TIPO INCOMPATIBLE", $"{name} ESPERABA VALOR ENTERO");
                     }
-                } else if (type == "DBL")
+                }
+                else if (type == "DBL")
                 {
-                    if (double.TryParse(value, out double esDecimal))
-                    {
-                        continue;
-                    }
-                    else
+                    // double.TryParse(value, out double esDecimal) devuelve TRUE si el valor es decimal
+                    if (int.TryParse(value, out int esEntero) || !double.TryParse(value, out double esDecimal))
                     {
                         // dbl var = 2 || dbl var = 'cadena'
                         AddError(line, "TIPO INCOMPATIBLE", $"{name} ESPERABA VALOR DECIMAL");
                     }
-                } else if (type == "STR")
+                    else
+                    {
+                        // Pasar a siguiente fila
+                        continue;
+                    }
+                }
+                else if (type == "STR")
                 {
-                    if (int.TryParse(value, out int esEntero1) || double.TryParse(value, out double esDecimal1))
+                    // Si es entero o es decimal, entonces no es una cadena
+                    if (int.TryParse(value, out int esEntero) || double.TryParse(value, out double esDecimal))
                     {
                         // str var = 2.2 || str var = 2
                         AddError(line, "TIPO INCOMPATIBLE", $"{name} ESPERABA UNA CADENA");
                     }
                     else
                     {
+                        // Pasar a siguiente fila
                         continue;
 
                     }
@@ -284,7 +301,7 @@ namespace QuringLang
             }
         }
 
-        private void AddSymbol(int line,string type, string name, string value)
+        private void AddSymbol(int line, string type, string name, string value)
         {
 
             dtgSymbols.Rows.Add(line, type, name, value);
