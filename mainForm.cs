@@ -70,9 +70,10 @@ namespace QuringLang
             // Ejecutar analizador léxico
             Lexer();
             // Ejecutar analizador sintáctico
-            Syntax();
+            // Syntax();
             // Ejecutar analizador semántico
             Semantic();
+            Preorder();
         }
 
         private void Lexer()
@@ -199,6 +200,35 @@ namespace QuringLang
             CheckParentheses();
             // Revisar símbolos
             CheckSymbols();
+        }
+
+        // Pasar salida a notación preorden, pasos previos a generación de código intermedio
+        private void Preorder()
+        {
+            for (int i = 0; i < txtLexer.Lines.Length - 1; i++)
+            {
+                List<string> outputPreorder = new List<string>();
+                string[] tokensByLine = txtLexer.Lines[i].Split(" ");
+                int line = i + 1;
+
+                for (int j = 0; j < tokensByLine.Length; j++)
+                {
+                    if (tokensByLine[j].StartsWith("OP-A") || tokensByLine[j] == "ASIGN")
+                    {
+                        outputPreorder.Add(tokensByLine[j]);
+                        outputPreorder.Add(tokensByLine[j - 1]);
+                        outputPreorder.Add(tokensByLine[j + 1]);
+                    }
+                }
+
+                foreach (string token in outputPreorder)
+                {
+                    txtPreorden.AppendText(token + " ");
+                }
+
+                txtPreorden.AppendText(Environment.NewLine);
+
+            }
         }
 
         private void CheckParentheses()

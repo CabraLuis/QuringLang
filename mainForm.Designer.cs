@@ -47,6 +47,10 @@
             lblSyntax = new Label();
             lblErrors = new Label();
             dtgSymbols = new DataGridView();
+            lineSimbolo = new DataGridViewTextBoxColumn();
+            tipo = new DataGridViewTextBoxColumn();
+            nombreToken = new DataGridViewTextBoxColumn();
+            valor = new DataGridViewTextBoxColumn();
             lblSymbols = new Label();
             txtSourceCode = new RichTextBox();
             txtLexer = new RichTextBox();
@@ -57,10 +61,8 @@
             lblSyntaxOutput = new Label();
             picLogoQuring = new PictureBox();
             label1 = new Label();
-            lineSimbolo = new DataGridViewTextBoxColumn();
-            tipo = new DataGridViewTextBoxColumn();
-            nombreToken = new DataGridViewTextBoxColumn();
-            valor = new DataGridViewTextBoxColumn();
+            txtPreorden = new RichTextBox();
+            label2 = new Label();
             ((System.ComponentModel.ISupportInitialize)dtgLexer).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dtgGrammars).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dtgErrors).BeginInit();
@@ -257,8 +259,37 @@
             dtgSymbols.RowHeadersVisible = false;
             dtgSymbols.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             dtgSymbols.RowTemplate.Height = 25;
-            dtgSymbols.Size = new Size(766, 150);
+            dtgSymbols.Size = new Size(656, 150);
             dtgSymbols.TabIndex = 13;
+            // 
+            // lineSimbolo
+            // 
+            lineSimbolo.AutoSizeMode = DataGridViewAutoSizeColumnMode.ColumnHeader;
+            lineSimbolo.HeaderText = "Linea";
+            lineSimbolo.Name = "lineSimbolo";
+            lineSimbolo.ReadOnly = true;
+            lineSimbolo.Width = 67;
+            // 
+            // tipo
+            // 
+            tipo.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            tipo.HeaderText = "Tipo";
+            tipo.Name = "tipo";
+            tipo.ReadOnly = true;
+            // 
+            // nombreToken
+            // 
+            nombreToken.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            nombreToken.HeaderText = "Nombre";
+            nombreToken.Name = "nombreToken";
+            nombreToken.ReadOnly = true;
+            // 
+            // valor
+            // 
+            valor.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            valor.HeaderText = "Valor";
+            valor.Name = "valor";
+            valor.ReadOnly = true;
             // 
             // lblSymbols
             // 
@@ -275,7 +306,7 @@
             txtSourceCode.Font = new Font("Consolas", 12F, FontStyle.Regular, GraphicsUnit.Point);
             txtSourceCode.Location = new Point(399, 103);
             txtSourceCode.Name = "txtSourceCode";
-            txtSourceCode.Size = new Size(322, 387);
+            txtSourceCode.Size = new Size(200, 387);
             txtSourceCode.TabIndex = 16;
             txtSourceCode.Text = "";
             txtSourceCode.WordWrap = false;
@@ -287,10 +318,10 @@
             // txtLexer
             // 
             txtLexer.Font = new Font("Consolas", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            txtLexer.Location = new Point(727, 103);
+            txtLexer.Location = new Point(605, 103);
             txtLexer.Name = "txtLexer";
             txtLexer.ReadOnly = true;
-            txtLexer.Size = new Size(297, 387);
+            txtLexer.Size = new Size(200, 387);
             txtLexer.TabIndex = 17;
             txtLexer.Text = "";
             txtLexer.WordWrap = false;
@@ -299,10 +330,10 @@
             // 
             txtSyntax.BackColor = SystemColors.Control;
             txtSyntax.Font = new Font("Consolas", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            txtSyntax.Location = new Point(1030, 103);
+            txtSyntax.Location = new Point(811, 103);
             txtSyntax.Name = "txtSyntax";
             txtSyntax.ReadOnly = true;
-            txtSyntax.Size = new Size(297, 387);
+            txtSyntax.Size = new Size(200, 387);
             txtSyntax.TabIndex = 18;
             txtSyntax.Text = "";
             txtSyntax.WordWrap = false;
@@ -336,7 +367,7 @@
             // 
             lblLexerOutput.AutoSize = true;
             lblLexerOutput.Font = new Font("Consolas", 12F, FontStyle.Bold, GraphicsUnit.Point);
-            lblLexerOutput.Location = new Point(727, 81);
+            lblLexerOutput.Location = new Point(605, 81);
             lblLexerOutput.Name = "lblLexerOutput";
             lblLexerOutput.Size = new Size(162, 19);
             lblLexerOutput.TabIndex = 21;
@@ -346,7 +377,7 @@
             // 
             lblSyntaxOutput.AutoSize = true;
             lblSyntaxOutput.Font = new Font("Consolas", 12F, FontStyle.Bold, GraphicsUnit.Point);
-            lblSyntaxOutput.Location = new Point(1030, 81);
+            lblSyntaxOutput.Location = new Point(811, 81);
             lblSyntaxOutput.Name = "lblSyntaxOutput";
             lblSyntaxOutput.Size = new Size(198, 19);
             lblSyntaxOutput.TabIndex = 22;
@@ -372,41 +403,36 @@
             label1.TabIndex = 24;
             label1.Text = "Líneas";
             // 
-            // lineSimbolo
+            // txtPreorden
             // 
-            lineSimbolo.AutoSizeMode = DataGridViewAutoSizeColumnMode.ColumnHeader;
-            lineSimbolo.HeaderText = "Linea";
-            lineSimbolo.Name = "lineSimbolo";
-            lineSimbolo.ReadOnly = true;
-            lineSimbolo.Width = 67;
+            txtPreorden.BackColor = SystemColors.Control;
+            txtPreorden.Font = new Font("Consolas", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            txtPreorden.Location = new Point(1017, 103);
+            txtPreorden.Name = "txtPreorden";
+            txtPreorden.ReadOnly = true;
+            txtPreorden.Size = new Size(200, 387);
+            txtPreorden.TabIndex = 25;
+            txtPreorden.Text = "";
+            txtPreorden.WordWrap = false;
             // 
-            // tipo
+            // label2
             // 
-            tipo.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            tipo.HeaderText = "Tipo";
-            tipo.Name = "tipo";
-            tipo.ReadOnly = true;
-            // 
-            // nombreToken
-            // 
-            nombreToken.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            nombreToken.HeaderText = "Nombre";
-            nombreToken.Name = "nombreToken";
-            nombreToken.ReadOnly = true;
-            // 
-            // valor
-            // 
-            valor.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            valor.HeaderText = "Valor";
-            valor.Name = "valor";
-            valor.ReadOnly = true;
+            label2.AutoSize = true;
+            label2.Font = new Font("Consolas", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            label2.Location = new Point(1017, 81);
+            label2.Name = "label2";
+            label2.Size = new Size(162, 19);
+            label2.TabIndex = 26;
+            label2.Text = "Notación Preorden";
             // 
             // mainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.Control;
-            ClientSize = new Size(1339, 673);
+            ClientSize = new Size(1228, 673);
+            Controls.Add(label2);
+            Controls.Add(txtPreorden);
             Controls.Add(label1);
             Controls.Add(picLogoQuring);
             Controls.Add(lblSyntaxOutput);
@@ -466,5 +492,7 @@
         private DataGridViewTextBoxColumn tipo;
         private DataGridViewTextBoxColumn nombreToken;
         private DataGridViewTextBoxColumn valor;
+        private RichTextBox txtPreorden;
+        private Label label2;
     }
 }
