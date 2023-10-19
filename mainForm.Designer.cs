@@ -62,7 +62,10 @@
             picLogoQuring = new PictureBox();
             label1 = new Label();
             txtPreorden = new RichTextBox();
-            label2 = new Label();
+            lblPreorden = new Label();
+            lblPostorden = new Label();
+            txtPostorden = new RichTextBox();
+            btnNotaciones = new Button();
             ((System.ComponentModel.ISupportInitialize)dtgLexer).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dtgGrammars).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dtgErrors).BeginInit();
@@ -407,23 +410,55 @@
             // 
             txtPreorden.BackColor = SystemColors.Control;
             txtPreorden.Font = new Font("Consolas", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            txtPreorden.Location = new Point(1017, 103);
+            txtPreorden.Location = new Point(1016, 171);
             txtPreorden.Name = "txtPreorden";
             txtPreorden.ReadOnly = true;
-            txtPreorden.Size = new Size(200, 387);
+            txtPreorden.Size = new Size(200, 144);
             txtPreorden.TabIndex = 25;
             txtPreorden.Text = "";
             txtPreorden.WordWrap = false;
             // 
-            // label2
+            // lblPreorden
             // 
-            label2.AutoSize = true;
-            label2.Font = new Font("Consolas", 12F, FontStyle.Bold, GraphicsUnit.Point);
-            label2.Location = new Point(1017, 81);
-            label2.Name = "label2";
-            label2.Size = new Size(162, 19);
-            label2.TabIndex = 26;
-            label2.Text = "Notación Preorden";
+            lblPreorden.AutoSize = true;
+            lblPreorden.Font = new Font("Consolas", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            lblPreorden.Location = new Point(1016, 149);
+            lblPreorden.Name = "lblPreorden";
+            lblPreorden.Size = new Size(162, 19);
+            lblPreorden.TabIndex = 26;
+            lblPreorden.Text = "Notación Preorden";
+            // 
+            // lblPostorden
+            // 
+            lblPostorden.AutoSize = true;
+            lblPostorden.Font = new Font("Consolas", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            lblPostorden.Location = new Point(1016, 318);
+            lblPostorden.Name = "lblPostorden";
+            lblPostorden.Size = new Size(162, 19);
+            lblPostorden.TabIndex = 28;
+            lblPostorden.Text = "Notación Preorden";
+            // 
+            // txtPostorden
+            // 
+            txtPostorden.BackColor = SystemColors.Control;
+            txtPostorden.Font = new Font("Consolas", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            txtPostorden.Location = new Point(1016, 346);
+            txtPostorden.Name = "txtPostorden";
+            txtPostorden.ReadOnly = true;
+            txtPostorden.Size = new Size(200, 144);
+            txtPostorden.TabIndex = 27;
+            txtPostorden.Text = "";
+            txtPostorden.WordWrap = false;
+            // 
+            // btnNotaciones
+            // 
+            btnNotaciones.Location = new Point(1017, 123);
+            btnNotaciones.Name = "btnNotaciones";
+            btnNotaciones.Size = new Size(75, 23);
+            btnNotaciones.TabIndex = 29;
+            btnNotaciones.Text = "Notaciones";
+            btnNotaciones.UseVisualStyleBackColor = true;
+            btnNotaciones.Click += btnNotaciones_Click;
             // 
             // mainForm
             // 
@@ -431,7 +466,10 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.Control;
             ClientSize = new Size(1228, 673);
-            Controls.Add(label2);
+            Controls.Add(btnNotaciones);
+            Controls.Add(lblPostorden);
+            Controls.Add(txtPostorden);
+            Controls.Add(lblPreorden);
             Controls.Add(txtPreorden);
             Controls.Add(label1);
             Controls.Add(picLogoQuring);
@@ -493,6 +531,9 @@
         private DataGridViewTextBoxColumn nombreToken;
         private DataGridViewTextBoxColumn valor;
         private RichTextBox txtPreorden;
-        private Label label2;
+        private Label lblPreorden;
+        private Label lblPostorden;
+        private RichTextBox txtPostorden;
+        private Button btnNotaciones;
     }
 }

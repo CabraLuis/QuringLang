@@ -73,7 +73,6 @@ namespace QuringLang
             // Syntax();
             // Ejecutar analizador semántico
             Semantic();
-            Preorder();
         }
 
         private void Lexer()
@@ -201,34 +200,161 @@ namespace QuringLang
             // Revisar símbolos
             CheckSymbols();
         }
-
-        // Pasar salida a notación preorden, pasos previos a generación de código intermedio
-        private void Preorder()
+        static bool isalpha(char c)
         {
-            for (int i = 0; i < txtLexer.Lines.Length - 1; i++)
+            if (c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z')
             {
-                List<string> outputPreorder = new List<string>();
-                string[] tokensByLine = txtLexer.Lines[i].Split(" ");
-                int line = i + 1;
+                return true;
+            }
+            return false;
+        }
 
-                for (int j = 0; j < tokensByLine.Length; j++)
+        // Check if the current character is a digit
+        static bool isdigit(char c)
+        {
+            if (c >= '0' && c <= '9')
+            {
+                return true;
+            }
+            return false;
+        }
+
+        // Function to check if the character is an operator
+        static bool isOperator(char c)
+        {
+            return (!isalpha(c) && !isdigit(c));
+        }
+
+        // Function to get the precedence order of operators
+        static int getPriority(char C)
+        {
+            if (C == '-' || C == '+')
+                return 1;
+            else if (C == '*' || C == '/')
+                return 2;
+            else if (C == '^')
+                return 3;
+
+            return 0;
+        }
+
+        // Reverse the letters of the word
+        static String reverse(char[] str, int start, int end)
+        {
+
+            // Temporary variable to store character
+            char temp;
+            while (start < end)
+            {
+
+                // Swapping the first and last character
+                temp = str[start];
+                str[start] = str[end];
+                str[end] = temp;
+                start++;
+                end--;
+            }
+            return String.Join("", str);
+        }
+
+        // Function to convert infix to postfix notation
+        static String infixToPostfix(char[] infix1)
+        {
+            String infix = '(' + String.Join("", infix1) + ')';
+
+            int l = infix.Length;
+            Stack<char> char_stack = new Stack<char>();
+            String output = "";
+
+            for (int i = 0; i < l; i++)
+            {
+
+                // If the scanned character is an
+                // operand, add it to output.
+                if (isalpha(infix[i]) || isdigit(infix[i]))
+                    output += infix[i];
+
+                // If the scanned character is an
+                // ‘(‘, push it to the stack.
+                else if (infix[i] == '(')
+                    char_stack.Push('(');
+
+                // If the scanned character is an
+                // ‘)’, pop and output from the stack
+                // until an ‘(‘ is encountered.
+                else if (infix[i] == ')')
                 {
-                    if (tokensByLine[j].StartsWith("OP-A") || tokensByLine[j] == "ASIGN")
+                    while (char_stack.Peek() != '(')
                     {
-                        outputPreorder.Add(tokensByLine[j]);
-                        outputPreorder.Add(tokensByLine[j - 1]);
-                        outputPreorder.Add(tokensByLine[j + 1]);
+                        output += char_stack.Peek();
+                        char_stack.Pop();
+                    }
+
+                    // Remove '(' from the stack
+                    char_stack.Pop();
+                }
+
+                // Operator found
+                else
+                {
+                    if (isOperator(char_stack.Peek()))
+                    {
+                        while (
+                            (getPriority(infix[i])
+                             < getPriority(char_stack.Peek()))
+                            || (getPriority(infix[i])
+                                    <= getPriority(
+                                        char_stack.Peek())
+                                && infix[i] == '^'))
+                        {
+                            output += char_stack.Peek();
+                            char_stack.Pop();
+                        }
+
+                        // Push current Operator on stack
+                        char_stack.Push(infix[i]);
                     }
                 }
-
-                foreach (string token in outputPreorder)
-                {
-                    txtPreorden.AppendText(token + " ");
-                }
-
-                txtPreorden.AppendText(Environment.NewLine);
-
             }
+            while (char_stack.Count != 0)
+            {
+                output += char_stack.Pop();
+            }
+            return output;
+        }
+
+        // Driver code
+        static String infixToPrefix(char[] infix)
+        {
+            // Reverse String Replace ( with ) and vice versa
+            // Get Postfix
+            // Reverse Postfix *
+            int l = infix.Length;
+
+            // Reverse infix
+            String infix1 = reverse(infix, 0, l - 1);
+            infix = infix1.ToCharArray();
+
+            // Replace ( with ) and vice versa
+            for (int i = 0; i < l; i++)
+            {
+                if (infix[i] == '(')
+                {
+                    infix[i] = ')';
+                    i++;
+                }
+                else if (infix[i] == ')')
+                {
+                    infix[i] = '(';
+                    i++;
+                }
+            }
+            String prefix = infixToPostfix(infix);
+
+            // Reverse postfix
+            prefix = reverse(prefix.ToCharArray(), 0, l - 1);
+
+            return prefix;
         }
 
         private void CheckParentheses()
@@ -424,6 +550,14 @@ namespace QuringLang
         {
             txtSourceCode.Select();
             txtLines.DeselectAll();
+        }
+
+        private void btnNotaciones_Click(object sender, EventArgs e)
+        {
+            string tokenLine = txtSourceCode.Lines[0];
+            txtPreorden.Text = infixToPrefix(tokenLine.ToCharArray());
+            txtPostorden.Text = infixToPostfix(tokenLine.ToCharArray());
+
         }
     }
 }
