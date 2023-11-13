@@ -73,6 +73,7 @@ namespace QuringLang
             // Syntax();
             // Ejecutar analizador semántico
             Semantic();
+            txtPostOrden.Text = InfixToPrefix(txtLexer.Text.Split(" "));
         }
 
         private void Lexer()
@@ -200,161 +201,124 @@ namespace QuringLang
             // Revisar símbolos
             CheckSymbols();
         }
-        static bool isalpha(char c)
+
+        // Conseguir jerarquía de operadores y palabras reservadas
+        private int Precedence(string token)
         {
-            if (c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z')
+            switch (token)
             {
-                return true;
+                case "PR-03": // if
+                case "PR-06": // for
+                case "PR-08": //while 
+                case "ASIGN": // =
+                    return 1;
+                case "OP-A1": // +
+                case "OP-A2": // -
+                    return 2;
+                case "OP-R1": // <
+                case "OP-R2": // >
+                case "OP-R3": // <=
+                case "OP-R4": // >=
+                case "OP-R5": // ==
+                case "OP-R6": // <>
+                    return 3;
+                case "OP-A3": // *
+                case "OP-A4": // /
+                    return 4;
+                case "OP-A5": // ^
+                    return 5;
+                default:
+                    return -1;
             }
-            return false;
         }
 
-        // Check if the current character is a digit
-        static bool isdigit(char c)
+        // Infijo -> Prefijo
+        private string InfixToPrefix(String[] tokens)
         {
-            if (c >= '0' && c <= '9')
+            Stack<string> stack = new Stack<string>();
+            List<string> output = new List<string>();
+
+            for (int i = tokens.Length - 1; i >= 0; i--)
             {
-                return true;
-            }
-            return false;
-        }
+                String token = tokens[i];
 
-        // Function to check if the character is an operator
-        static bool isOperator(char c)
-        {
-            return (!isalpha(c) && !isdigit(c));
-        }
-
-        // Function to get the precedence order of operators
-        static int getPriority(char C)
-        {
-            if (C == '-' || C == '+')
-                return 1;
-            else if (C == '*' || C == '/')
-                return 2;
-            else if (C == '^')
-                return 3;
-
-            return 0;
-        }
-
-        // Reverse the letters of the word
-        static String reverse(char[] str, int start, int end)
-        {
-
-            // Temporary variable to store character
-            char temp;
-            while (start < end)
-            {
-
-                // Swapping the first and last character
-                temp = str[start];
-                str[start] = str[end];
-                str[end] = temp;
-                start++;
-                end--;
-            }
-            return String.Join("", str);
-        }
-
-        // Function to convert infix to postfix notation
-        static String infixToPostfix(char[] infix1)
-        {
-            String infix = '(' + String.Join("", infix1) + ')';
-
-            int l = infix.Length;
-            Stack<char> char_stack = new Stack<char>();
-            String output = "";
-
-            for (int i = 0; i < l; i++)
-            {
-
-                // If the scanned character is an
-                // operand, add it to output.
-                if (isalpha(infix[i]) || isdigit(infix[i]))
-                    output += infix[i];
-
-                // If the scanned character is an
-                // ‘(‘, push it to the stack.
-                else if (infix[i] == '(')
-                    char_stack.Push('(');
-
-                // If the scanned character is an
-                // ‘)’, pop and output from the stack
-                // until an ‘(‘ is encountered.
-                else if (infix[i] == ')')
+                if (token == "NC-EN" || token == "NC-RE" || token == "IDV")
                 {
-                    while (char_stack.Peek() != '(')
+                    output.Add(token);
+                }
+                else if (token == "OP-R1" || token == "OP-R2" || token == "OP-R3" || token == "OP-R4" || token == "OP-R5" || token == "OP-R6" || token == "PR-03" || token == "PR-06" || token == "PR-08" || token == "ASIGN" || token == "OP-A1" || token == "OP-A2" || token == "OP-A3" || token == "OP-A4" || token == "OP-A5")
+                {
+                    while (stack.Count > 0 && Precedence(stack.Peek()) > Precedence(token))
                     {
-                        output += char_stack.Peek();
-                        char_stack.Pop();
+                        output.Add(stack.Pop());
                     }
-
-                    // Remove '(' from the stack
-                    char_stack.Pop();
-                }
-
-                // Operator found
-                else
-                {
-                    if (isOperator(char_stack.Peek()))
-                    {
-                        while (
-                            (getPriority(infix[i])
-                             < getPriority(char_stack.Peek()))
-                            || (getPriority(infix[i])
-                                    <= getPriority(
-                                        char_stack.Peek())
-                                && infix[i] == '^'))
-                        {
-                            output += char_stack.Peek();
-                            char_stack.Pop();
-                        }
-
-                        // Push current Operator on stack
-                        char_stack.Push(infix[i]);
-                    }
+                    stack.Push(token);
                 }
             }
-            while (char_stack.Count != 0)
+
+            while (stack.Count > 0)
             {
-                output += char_stack.Pop();
+                output.Add(stack.Pop());
             }
-            return output;
+            FillTriplets(output);
+            return string.Join(" ", output);
         }
 
-        // Driver code
-        static String infixToPrefix(char[] infix)
+        private void FillTriplets(List<string> tokens)
         {
-            // Reverse String Replace ( with ) and vice versa
-            // Get Postfix
-            // Reverse Postfix *
-            int l = infix.Length;
-
-            // Reverse infix
-            String infix1 = reverse(infix, 0, l - 1);
-            infix = infix1.ToCharArray();
-
-            // Replace ( with ) and vice versa
-            for (int i = 0; i < l; i++)
+            dtgTriplets.Rows.Clear();
+            string jump;
+            switch (tokens[2])
             {
-                if (infix[i] == '(')
-                {
-                    infix[i] = ')';
-                    i++;
-                }
-                else if (infix[i] == ')')
-                {
-                    infix[i] = '(';
-                    i++;
-                }
+                // <
+                case "OP-R1": jump = "jl"; break;
+                // >
+                case "OP-R2": jump = "jg"; break;
+                // <=
+                case "OP-R3": jump = "jle"; break;
+                // >=
+                case "OP-R4": jump = "jge"; break;
+                // ==
+                case "OP-R5": jump = "je"; break;
+                // <>
+                case "OP-R6": jump = "jne"; break;
+                default:
+                    jump = "jmp";
+                    break;
             }
-            String prefix = infixToPostfix(infix);
+            if (tokens[tokens.Count - 1] == "ASIGN")
+            {
+                dtgTriplets.Rows.Add(tokens[0], tokens[1], tokens[2]);
+                txtEnsamblador.Text = $"mov ax, {tokens[0]}";
+            }
+            else if (tokens[tokens.Count - 1] == "PR-03")
+            {
+                dtgTriplets.Rows.Add("T1", tokens[0], '=');
+                dtgTriplets.Rows.Add("T1", tokens[1], tokens[2]);
+                dtgTriplets.Rows.Add("T1", tokens[3], "");
 
-            // Reverse postfix
-            prefix = reverse(prefix.ToCharArray(), 0, l - 1);
+                txtEnsamblador.Text = $"mov ax, {tokens[0]}\ncmp ax, {tokens[1]}\n{jump} fin";
 
-            return prefix;
+            }
+            else if (tokens[tokens.Count - 1] == "PR-06")
+            {
+                dtgTriplets.Rows.Add("T1", tokens[0], '=');
+                dtgTriplets.Rows.Add("T1", tokens[1], tokens[2]);
+                dtgTriplets.Rows.Add("T1", tokens[3], "");
+
+                txtEnsamblador.Text = $"for:\nmov ax, {tokens[0]}\ncmp ax, {tokens[1]}\n{jump} fin\njmp for";
+
+            }
+            else if (tokens[tokens.Count - 1] == "PR-08")
+            {
+                dtgTriplets.Rows.Add("T1", tokens[0], '=');
+                dtgTriplets.Rows.Add("T1", tokens[1], tokens[2]);
+                dtgTriplets.Rows.Add("T1", tokens[3], "");
+
+                txtEnsamblador.Text = $"while:\nmov ax, {tokens[0]}\ncmp ax, {tokens[1]}\njmp while\n{jump} fin";
+
+            }
+
         }
 
         private void CheckParentheses()
@@ -552,12 +516,5 @@ namespace QuringLang
             txtLines.DeselectAll();
         }
 
-        private void btnNotaciones_Click(object sender, EventArgs e)
-        {
-            string tokenLine = txtSourceCode.Lines[0];
-            txtPreorden.Text = infixToPrefix(tokenLine.ToCharArray());
-            txtPostorden.Text = infixToPostfix(tokenLine.ToCharArray());
-
-        }
     }
 }

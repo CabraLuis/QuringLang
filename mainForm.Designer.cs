@@ -35,6 +35,8 @@
             DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle7 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle8 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle9 = new DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(mainForm));
             dtgLexer = new DataGridView();
             btnCompile = new Button();
@@ -61,16 +63,21 @@
             lblSyntaxOutput = new Label();
             picLogoQuring = new PictureBox();
             label1 = new Label();
-            txtPreorden = new RichTextBox();
-            lblPreorden = new Label();
-            lblPostorden = new Label();
-            txtPostorden = new RichTextBox();
-            btnNotaciones = new Button();
+            dtgTriplets = new DataGridView();
+            dataGridViewTextBoxColumn1 = new DataGridViewTextBoxColumn();
+            dataGridViewTextBoxColumn2 = new DataGridViewTextBoxColumn();
+            dataGridViewTextBoxColumn3 = new DataGridViewTextBoxColumn();
+            txtEnsamblador = new RichTextBox();
+            txtPostOrden = new RichTextBox();
+            label2 = new Label();
+            label3 = new Label();
+            label4 = new Label();
             ((System.ComponentModel.ISupportInitialize)dtgLexer).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dtgGrammars).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dtgErrors).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dtgSymbols).BeginInit();
             ((System.ComponentModel.ISupportInitialize)picLogoQuring).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dtgTriplets).BeginInit();
             SuspendLayout();
             // 
             // dtgLexer
@@ -262,7 +269,7 @@
             dtgSymbols.RowHeadersVisible = false;
             dtgSymbols.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             dtgSymbols.RowTemplate.Height = 25;
-            dtgSymbols.Size = new Size(656, 150);
+            dtgSymbols.Size = new Size(283, 150);
             dtgSymbols.TabIndex = 13;
             // 
             // lineSimbolo
@@ -324,7 +331,7 @@
             txtLexer.Location = new Point(605, 103);
             txtLexer.Name = "txtLexer";
             txtLexer.ReadOnly = true;
-            txtLexer.Size = new Size(200, 387);
+            txtLexer.Size = new Size(200, 181);
             txtLexer.TabIndex = 17;
             txtLexer.Text = "";
             txtLexer.WordWrap = false;
@@ -333,10 +340,10 @@
             // 
             txtSyntax.BackColor = SystemColors.Control;
             txtSyntax.Font = new Font("Consolas", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            txtSyntax.Location = new Point(811, 103);
+            txtSyntax.Location = new Point(605, 309);
             txtSyntax.Name = "txtSyntax";
             txtSyntax.ReadOnly = true;
-            txtSyntax.Size = new Size(200, 387);
+            txtSyntax.Size = new Size(200, 181);
             txtSyntax.TabIndex = 18;
             txtSyntax.Text = "";
             txtSyntax.WordWrap = false;
@@ -380,7 +387,7 @@
             // 
             lblSyntaxOutput.AutoSize = true;
             lblSyntaxOutput.Font = new Font("Consolas", 12F, FontStyle.Bold, GraphicsUnit.Point);
-            lblSyntaxOutput.Location = new Point(811, 81);
+            lblSyntaxOutput.Location = new Point(605, 287);
             lblSyntaxOutput.Name = "lblSyntaxOutput";
             lblSyntaxOutput.Size = new Size(198, 19);
             lblSyntaxOutput.TabIndex = 22;
@@ -406,71 +413,127 @@
             label1.TabIndex = 24;
             label1.Text = "Líneas";
             // 
-            // txtPreorden
+            // dtgTriplets
             // 
-            txtPreorden.BackColor = SystemColors.Control;
-            txtPreorden.Font = new Font("Consolas", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            txtPreorden.Location = new Point(1016, 171);
-            txtPreorden.Name = "txtPreorden";
-            txtPreorden.ReadOnly = true;
-            txtPreorden.Size = new Size(200, 144);
-            txtPreorden.TabIndex = 25;
-            txtPreorden.Text = "";
-            txtPreorden.WordWrap = false;
+            dtgTriplets.AllowUserToAddRows = false;
+            dtgTriplets.AllowUserToDeleteRows = false;
+            dtgTriplets.AllowUserToOrderColumns = true;
+            dtgTriplets.AllowUserToResizeColumns = false;
+            dtgTriplets.AllowUserToResizeRows = false;
+            dataGridViewCellStyle8.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle8.BackColor = SystemColors.Control;
+            dataGridViewCellStyle8.Font = new Font("Consolas", 9F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle8.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle8.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle8.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle8.WrapMode = DataGridViewTriState.True;
+            dtgTriplets.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle8;
+            dtgTriplets.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dtgTriplets.Columns.AddRange(new DataGridViewColumn[] { dataGridViewTextBoxColumn1, dataGridViewTextBoxColumn2, dataGridViewTextBoxColumn3 });
+            dataGridViewCellStyle9.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle9.BackColor = SystemColors.Window;
+            dataGridViewCellStyle9.Font = new Font("Consolas", 9F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle9.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle9.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle9.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle9.WrapMode = DataGridViewTriState.False;
+            dtgTriplets.DefaultCellStyle = dataGridViewCellStyle9;
+            dtgTriplets.Location = new Point(850, 515);
+            dtgTriplets.Name = "dtgTriplets";
+            dtgTriplets.ReadOnly = true;
+            dtgTriplets.RowHeadersVisible = false;
+            dtgTriplets.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+            dtgTriplets.RowTemplate.Height = 25;
+            dtgTriplets.Size = new Size(363, 150);
+            dtgTriplets.TabIndex = 25;
             // 
-            // lblPreorden
+            // dataGridViewTextBoxColumn1
             // 
-            lblPreorden.AutoSize = true;
-            lblPreorden.Font = new Font("Consolas", 12F, FontStyle.Bold, GraphicsUnit.Point);
-            lblPreorden.Location = new Point(1016, 149);
-            lblPreorden.Name = "lblPreorden";
-            lblPreorden.Size = new Size(162, 19);
-            lblPreorden.TabIndex = 26;
-            lblPreorden.Text = "Notación Preorden";
+            dataGridViewTextBoxColumn1.AutoSizeMode = DataGridViewAutoSizeColumnMode.ColumnHeader;
+            dataGridViewTextBoxColumn1.HeaderText = "Dato Objeto";
+            dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
+            dataGridViewTextBoxColumn1.ReadOnly = true;
             // 
-            // lblPostorden
+            // dataGridViewTextBoxColumn2
             // 
-            lblPostorden.AutoSize = true;
-            lblPostorden.Font = new Font("Consolas", 12F, FontStyle.Bold, GraphicsUnit.Point);
-            lblPostorden.Location = new Point(1016, 318);
-            lblPostorden.Name = "lblPostorden";
-            lblPostorden.Size = new Size(162, 19);
-            lblPostorden.TabIndex = 28;
-            lblPostorden.Text = "Notación Preorden";
+            dataGridViewTextBoxColumn2.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            dataGridViewTextBoxColumn2.HeaderText = "Dato Fuente";
+            dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
+            dataGridViewTextBoxColumn2.ReadOnly = true;
             // 
-            // txtPostorden
+            // dataGridViewTextBoxColumn3
             // 
-            txtPostorden.BackColor = SystemColors.Control;
-            txtPostorden.Font = new Font("Consolas", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            txtPostorden.Location = new Point(1016, 346);
-            txtPostorden.Name = "txtPostorden";
-            txtPostorden.ReadOnly = true;
-            txtPostorden.Size = new Size(200, 144);
-            txtPostorden.TabIndex = 27;
-            txtPostorden.Text = "";
-            txtPostorden.WordWrap = false;
+            dataGridViewTextBoxColumn3.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            dataGridViewTextBoxColumn3.HeaderText = "Operador";
+            dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
+            dataGridViewTextBoxColumn3.ReadOnly = true;
             // 
-            // btnNotaciones
+            // txtEnsamblador
             // 
-            btnNotaciones.Location = new Point(1017, 123);
-            btnNotaciones.Name = "btnNotaciones";
-            btnNotaciones.Size = new Size(75, 23);
-            btnNotaciones.TabIndex = 29;
-            btnNotaciones.Text = "Notaciones";
-            btnNotaciones.UseVisualStyleBackColor = true;
-            btnNotaciones.Click += btnNotaciones_Click;
+            txtEnsamblador.BackColor = SystemColors.Control;
+            txtEnsamblador.Font = new Font("Consolas", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            txtEnsamblador.Location = new Point(1017, 103);
+            txtEnsamblador.Name = "txtEnsamblador";
+            txtEnsamblador.ReadOnly = true;
+            txtEnsamblador.Size = new Size(200, 387);
+            txtEnsamblador.TabIndex = 26;
+            txtEnsamblador.Text = "";
+            txtEnsamblador.WordWrap = false;
+            // 
+            // txtPostOrden
+            // 
+            txtPostOrden.BackColor = SystemColors.Control;
+            txtPostOrden.Font = new Font("Consolas", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            txtPostOrden.Location = new Point(811, 103);
+            txtPostOrden.Name = "txtPostOrden";
+            txtPostOrden.ReadOnly = true;
+            txtPostOrden.Size = new Size(200, 387);
+            txtPostOrden.TabIndex = 27;
+            txtPostOrden.Text = "";
+            txtPostOrden.WordWrap = false;
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Font = new Font("Consolas", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            label2.Location = new Point(811, 81);
+            label2.Name = "label2";
+            label2.Size = new Size(90, 19);
+            label2.TabIndex = 28;
+            label2.Text = "Postorden";
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Font = new Font("Consolas", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            label3.Location = new Point(1017, 81);
+            label3.Name = "label3";
+            label3.Size = new Size(108, 19);
+            label3.TabIndex = 29;
+            label3.Text = "Ensamblador";
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Font = new Font("Consolas", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            label4.Location = new Point(849, 493);
+            label4.Name = "label4";
+            label4.Size = new Size(72, 19);
+            label4.TabIndex = 30;
+            label4.Text = "Triplos";
             // 
             // mainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.Control;
-            ClientSize = new Size(1228, 673);
-            Controls.Add(btnNotaciones);
-            Controls.Add(lblPostorden);
-            Controls.Add(txtPostorden);
-            Controls.Add(lblPreorden);
-            Controls.Add(txtPreorden);
+            ClientSize = new Size(1225, 673);
+            Controls.Add(label4);
+            Controls.Add(label3);
+            Controls.Add(label2);
+            Controls.Add(txtPostOrden);
+            Controls.Add(txtEnsamblador);
+            Controls.Add(dtgTriplets);
             Controls.Add(label1);
             Controls.Add(picLogoQuring);
             Controls.Add(lblSyntaxOutput);
@@ -500,6 +563,7 @@
             ((System.ComponentModel.ISupportInitialize)dtgErrors).EndInit();
             ((System.ComponentModel.ISupportInitialize)dtgSymbols).EndInit();
             ((System.ComponentModel.ISupportInitialize)picLogoQuring).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dtgTriplets).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -530,10 +594,14 @@
         private DataGridViewTextBoxColumn tipo;
         private DataGridViewTextBoxColumn nombreToken;
         private DataGridViewTextBoxColumn valor;
-        private RichTextBox txtPreorden;
-        private Label lblPreorden;
-        private Label lblPostorden;
-        private RichTextBox txtPostorden;
-        private Button btnNotaciones;
+        private DataGridView dtgTriplets;
+        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
+        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
+        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn3;
+        private RichTextBox txtEnsamblador;
+        private RichTextBox txtPostOrden;
+        private Label label2;
+        private Label label3;
+        private Label label4;
     }
 }
