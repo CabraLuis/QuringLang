@@ -1,5 +1,7 @@
 ﻿using System.Data;
 using System.Data.OleDb;
+using System.IO;
+using System.Windows.Forms;
 
 namespace QuringLang
 {
@@ -58,6 +60,10 @@ namespace QuringLang
 
         private void btnCompile_Click(object sender, EventArgs e)
         {
+            /*File.WriteAllText(@"C:\Users\zetin\Downloads\input.asm", txtSourceCode.Text);
+            string comando1 = @"/c cd C:\Users\zetin\Downloads\ && exec.bat && input.exe > output.txt";
+            System.Diagnostics.Process.Start("CMD.exe", comando1).WaitForExit();
+            txtEnsamblador.Text = File.ReadAllText(@"C:\Users\zetin\Downloads\output.txt");*/
             // Limpiar salida de analizador léxico
             txtLexer.Clear();
             // Limpiar salida de analizador sintáctico
@@ -66,11 +72,11 @@ namespace QuringLang
             dtgSymbols.Rows.Clear();
             // Limpiar tabla de errores
             dtgErrors.Rows.Clear();
-
+             
             // Ejecutar analizador léxico
             Lexer();
             // Ejecutar analizador sintáctico
-            // Syntax();
+            Syntax();
             // Ejecutar analizador semántico
             Semantic();
             txtPostOrden.Text = InfixToPrefix(txtLexer.Text.Split(" "));
@@ -289,7 +295,7 @@ namespace QuringLang
             if (tokens[tokens.Count - 1] == "ASIGN")
             {
                 dtgTriplets.Rows.Add(tokens[0], tokens[1], tokens[2]);
-                txtEnsamblador.Text = $"mov ax, {tokens[0]}";
+                string variable = $"{tokens[1]} db {tokens[0]}";
             }
             else if (tokens[tokens.Count - 1] == "PR-03")
             {
@@ -318,7 +324,7 @@ namespace QuringLang
                 txtEnsamblador.Text = $"while:\nmov ax, {tokens[0]}\ncmp ax, {tokens[1]}\njmp while\n{jump} fin";
 
             }
-
+            
         }
 
         private void CheckParentheses()
