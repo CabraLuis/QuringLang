@@ -1,7 +1,5 @@
 ﻿using System.Data;
 using System.Data.OleDb;
-using System.IO;
-using System.Windows.Forms;
 
 namespace QuringLang
 {
@@ -60,10 +58,7 @@ namespace QuringLang
 
         private void btnCompile_Click(object sender, EventArgs e)
         {
-            /*File.WriteAllText(@"C:\Users\zetin\Downloads\input.asm", txtSourceCode.Text);
-            string comando1 = @"/c cd C:\Users\zetin\Downloads\ && exec.bat && input.exe > output.txt";
-            System.Diagnostics.Process.Start("CMD.exe", comando1).WaitForExit();
-            txtEnsamblador.Text = File.ReadAllText(@"C:\Users\zetin\Downloads\output.txt");*/
+
             // Limpiar salida de analizador léxico
             txtLexer.Clear();
             // Limpiar salida de analizador sintáctico
@@ -72,7 +67,7 @@ namespace QuringLang
             dtgSymbols.Rows.Clear();
             // Limpiar tabla de errores
             dtgErrors.Rows.Clear();
-             
+
             // Ejecutar analizador léxico
             Lexer();
             // Ejecutar analizador sintáctico
@@ -274,6 +269,7 @@ namespace QuringLang
         {
             dtgTriplets.Rows.Clear();
             string jump;
+            string code = "";
             switch (tokens[2])
             {
                 // <
@@ -303,8 +299,10 @@ namespace QuringLang
                 dtgTriplets.Rows.Add("T1", tokens[1], tokens[2]);
                 dtgTriplets.Rows.Add("T1", tokens[3], "");
 
-                txtEnsamblador.Text = $"mov ax, {tokens[0]}\ncmp ax, {tokens[1]}\n{jump} fin";
-
+                code =
+@$"mov ax, {tokens[0]}
+cmp ax, {tokens[1]}
+{jump} fin";
             }
             else if (tokens[tokens.Count - 1] == "PR-06")
             {
@@ -312,7 +310,12 @@ namespace QuringLang
                 dtgTriplets.Rows.Add("T1", tokens[1], tokens[2]);
                 dtgTriplets.Rows.Add("T1", tokens[3], "");
 
-                txtEnsamblador.Text = $"for:\nmov ax, {tokens[0]}\ncmp ax, {tokens[1]}\n{jump} fin\njmp for";
+                code =
+@$"for:
+mov ax, {tokens[0]}
+cmp ax, {tokens[1]}
+{jump} fin
+jmp for";
 
             }
             else if (tokens[tokens.Count - 1] == "PR-08")
@@ -321,10 +324,34 @@ namespace QuringLang
                 dtgTriplets.Rows.Add("T1", tokens[1], tokens[2]);
                 dtgTriplets.Rows.Add("T1", tokens[3], "");
 
-                txtEnsamblador.Text = $"while:\nmov ax, {tokens[0]}\ncmp ax, {tokens[1]}\njmp while\n{jump} fin";
+                code =
+@$"while:
+mov ax, {tokens[0]}
+cmp ax, {tokens[1]}
+jmp while
+{jump} fin";
 
             }
-            
+
+            /*File.WriteAllText(@"C:\Users\zetin\Downloads\input.asm", txtEnsamblador.Text);
+            string comando1 = @"/c cd C:\Users\zetin\Downloads\ && exec.bat && input.exe > output.txt";
+            System.Diagnostics.Process.Start("CMD.exe", comando1).WaitForExit();
+            txtEnsamblador.Text = File.ReadAllText(@"C:\Users\zetin\Downloads\output.txt");*/
+
+            string boilerplate =
+@$"include \masm32\include\masm32rt.inc
+.data
+.code
+main:
+{code}
+exitp:
+end main";
+            txtEnsamblador.Text = boilerplate;
+
+            File.WriteAllText(@"C:\Users\zetin\Downloads\input.asm", txtEnsamblador.Text);
+            string comando1 = @"/c cd C:\Users\zetin\Downloads\ && exec.bat && input.exe > output.txt";
+            System.Diagnostics.Process.Start("CMD.exe", comando1).WaitForExit();
+            txtOutput.Text = File.ReadAllText(@"C:\Users\zetin\Downloads\output.txt");
         }
 
         private void CheckParentheses()

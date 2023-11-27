@@ -72,6 +72,8 @@
             label2 = new Label();
             label3 = new Label();
             label4 = new Label();
+            txtOutput = new RichTextBox();
+            lblOutput = new Label();
             ((System.ComponentModel.ISupportInitialize)dtgLexer).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dtgGrammars).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dtgErrors).BeginInit();
@@ -472,10 +474,10 @@
             // 
             txtEnsamblador.BackColor = SystemColors.Control;
             txtEnsamblador.Font = new Font("Consolas", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            txtEnsamblador.Location = new Point(1017, 103);
+            txtEnsamblador.Location = new Point(813, 309);
             txtEnsamblador.Name = "txtEnsamblador";
             txtEnsamblador.ReadOnly = true;
-            txtEnsamblador.Size = new Size(200, 387);
+            txtEnsamblador.Size = new Size(200, 181);
             txtEnsamblador.TabIndex = 26;
             txtEnsamblador.Text = "";
             txtEnsamblador.WordWrap = false;
@@ -487,7 +489,7 @@
             txtPostOrden.Location = new Point(811, 103);
             txtPostOrden.Name = "txtPostOrden";
             txtPostOrden.ReadOnly = true;
-            txtPostOrden.Size = new Size(200, 387);
+            txtPostOrden.Size = new Size(200, 181);
             txtPostOrden.TabIndex = 27;
             txtPostOrden.Text = "";
             txtPostOrden.WordWrap = false;
@@ -506,7 +508,7 @@
             // 
             label3.AutoSize = true;
             label3.Font = new Font("Consolas", 12F, FontStyle.Bold, GraphicsUnit.Point);
-            label3.Location = new Point(1017, 81);
+            label3.Location = new Point(813, 287);
             label3.Name = "label3";
             label3.Size = new Size(108, 19);
             label3.TabIndex = 29;
@@ -522,12 +524,36 @@
             label4.TabIndex = 30;
             label4.Text = "Triplos";
             // 
+            // txtOutput
+            // 
+            txtOutput.BackColor = SystemColors.Control;
+            txtOutput.Font = new Font("Consolas", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            txtOutput.Location = new Point(1017, 103);
+            txtOutput.Name = "txtOutput";
+            txtOutput.ReadOnly = true;
+            txtOutput.Size = new Size(200, 387);
+            txtOutput.TabIndex = 31;
+            txtOutput.Text = "";
+            txtOutput.WordWrap = false;
+            // 
+            // lblOutput
+            // 
+            lblOutput.AutoSize = true;
+            lblOutput.Font = new Font("Consolas", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            lblOutput.Location = new Point(1017, 81);
+            lblOutput.Name = "lblOutput";
+            lblOutput.Size = new Size(63, 19);
+            lblOutput.TabIndex = 32;
+            lblOutput.Text = "Salida";
+            // 
             // mainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.Control;
             ClientSize = new Size(1225, 673);
+            Controls.Add(lblOutput);
+            Controls.Add(txtOutput);
             Controls.Add(label4);
             Controls.Add(label3);
             Controls.Add(label2);
@@ -603,5 +629,7 @@
         private Label label2;
         private Label label3;
         private Label label4;
+        private RichTextBox txtOutput;
+        private Label lblOutput;
     }
 }
