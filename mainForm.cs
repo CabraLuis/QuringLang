@@ -270,6 +270,7 @@ namespace QuringLang
             dtgTriplets.Rows.Clear();
             string jump;
             string code = "";
+            string operacion = "";
             switch (tokens[2])
             {
                 // <
@@ -288,10 +289,44 @@ namespace QuringLang
                     jump = "jmp";
                     break;
             }
-            if (tokens[tokens.Count - 1] == "ASIGN")
+            if (tokens[tokens.Count - 1] == "OP-A1")
             {
                 dtgTriplets.Rows.Add(tokens[0], tokens[1], tokens[2]);
-                string variable = $"{tokens[1]} db {tokens[0]}";
+                 operacion = 
+@$"mov ax, {tokens[0]}
+mov bx, {tokens[1]}
+add ax,bx";
+            }
+            else if (tokens[tokens.Count - 1] == "OP-A2")
+            {
+                dtgTriplets.Rows.Add(tokens[0], tokens[1], tokens[2]);
+                operacion =
+@$"mov ax, {tokens[0]}
+mov bx, {tokens[1]}
+sub ax,bx";
+            }
+            else if (tokens[tokens.Count - 1] == "OP-A3")
+            {
+                dtgTriplets.Rows.Add(tokens[0], tokens[1], tokens[2]);
+                operacion = $"{tokens[1]} db {tokens[0]}";
+                operacion =
+@$"mov ax, {tokens[0]}
+mov bx, {tokens[1]}
+mul ax,bx";
+            }
+            else if (tokens[tokens.Count - 1] == "OP-A4")
+            {
+                dtgTriplets.Rows.Add(tokens[0], tokens[1], tokens[2]);
+                operacion = $"{tokens[1]} db {tokens[0]}";
+                operacion =
+@$"mov ax, {tokens[0]}
+mov bx, {tokens[1]}
+div ax,bx";
+            }
+            else if (tokens[tokens.Count - 1] == "ASIGN")
+            {
+                dtgTriplets.Rows.Add(tokens[0], tokens[1], tokens[2]);
+                operacion = $"{tokens[1]} db {tokens[0]}";
             }
             else if (tokens[tokens.Count - 1] == "PR-03")
             {
@@ -301,6 +336,7 @@ namespace QuringLang
 
                 code =
 @$"mov ax, {tokens[0]}
+{operacion}
 cmp ax, {tokens[1]}
 {jump} fin";
             }
@@ -315,6 +351,7 @@ cmp ax, {tokens[1]}
 mov ax, {tokens[0]}
 cmp ax, {tokens[1]}
 {jump} fin
+{operacion}
 jmp for";
 
             }
@@ -327,6 +364,7 @@ jmp for";
                 code =
 @$"while:
 mov ax, {tokens[0]}
+{operacion}
 cmp ax, {tokens[1]}
 jmp while
 {jump} fin";
@@ -344,7 +382,7 @@ jmp while
 .code
 main:
 {code}
-exitp:
+fin:
 end main";
             txtEnsamblador.Text = boilerplate;
 
