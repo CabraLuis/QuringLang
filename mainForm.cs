@@ -63,6 +63,10 @@ namespace QuringLang
             txtLexer.Clear();
             // Limpiar salida de analizador sintáctico
             txtSyntax.Clear();
+            // Limpiar postorden
+            txtPostOrden.Clear();
+            txtEnsamblador.Clear();
+            txtOutput.Clear();
             // Limpiar tabla de símbolos
             dtgSymbols.Rows.Clear();
             // Limpiar tabla de errores
@@ -74,7 +78,14 @@ namespace QuringLang
             Syntax();
             // Ejecutar analizador semántico
             Semantic();
-            txtPostOrden.Text = InfixToPrefix(txtLexer.Text.Split(" "));
+
+            for (int i = 0; i < txtLexer.Lines.Length - 1; i++)
+            {
+                txtPostOrden.AppendText(InfixToPrefix(txtLexer.Lines[i].Split(" ")));
+                txtPostOrden.AppendText(Environment.NewLine);
+            }
+
+            ImSorry();
         }
 
         private void Lexer()
@@ -261,38 +272,45 @@ namespace QuringLang
             {
                 output.Add(stack.Pop());
             }
-            FillTriplets(output);
+
+
+//            FillTriplets(output);
+
             return string.Join(" ", output);
         }
-
+        string code = "";
         private void FillTriplets(List<string> tokens)
         {
             dtgTriplets.Rows.Clear();
-            string jump;
-            string code = "";
+            string jump ="jmp";
             string operacion = "";
-            switch (tokens[2])
-            {
-                // <
-                case "OP-R1": jump = "jl"; break;
-                // >
-                case "OP-R2": jump = "jg"; break;
-                // <=
-                case "OP-R3": jump = "jle"; break;
-                // >=
-                case "OP-R4": jump = "jge"; break;
-                // ==
-                case "OP-R5": jump = "je"; break;
-                // <>
-                case "OP-R6": jump = "jne"; break;
-                default:
-                    jump = "jmp";
-                    break;
+
+            // condicion,iteraciones,expresiones aritmeticas/logicas/relacionales
+            // a = a + 5 -> 5 
+            // imprimir salida prt 
+
+                switch (tokens[2])
+                {
+                    // <
+                    case "OP-R1": jump = "jl"; break;
+                    // >
+                    case "OP-R2": jump = "jg"; break;
+                    // <=
+                    case "OP-R3": jump = "jle"; break;
+                    // >=
+                    case "OP-R4": jump = "jge"; break;
+                    // ==
+                    case "OP-R5": jump = "je"; break;
+                    // <>
+                    case "OP-R6": jump = "jne"; break;
+                    default:
+                        jump = "jmp";
+                        break;
             }
             if (tokens[tokens.Count - 1] == "OP-A1")
             {
                 dtgTriplets.Rows.Add(tokens[0], tokens[1], tokens[2]);
-                 operacion = 
+                 code = 
 @$"mov ax, {tokens[0]}
 mov bx, {tokens[1]}
 add ax,bx";
@@ -300,7 +318,7 @@ add ax,bx";
             else if (tokens[tokens.Count - 1] == "OP-A2")
             {
                 dtgTriplets.Rows.Add(tokens[0], tokens[1], tokens[2]);
-                operacion =
+                code =
 @$"mov ax, {tokens[0]}
 mov bx, {tokens[1]}
 sub ax,bx";
@@ -308,8 +326,7 @@ sub ax,bx";
             else if (tokens[tokens.Count - 1] == "OP-A3")
             {
                 dtgTriplets.Rows.Add(tokens[0], tokens[1], tokens[2]);
-                operacion = $"{tokens[1]} db {tokens[0]}";
-                operacion =
+                code =
 @$"mov ax, {tokens[0]}
 mov bx, {tokens[1]}
 mul ax,bx";
@@ -317,8 +334,7 @@ mul ax,bx";
             else if (tokens[tokens.Count - 1] == "OP-A4")
             {
                 dtgTriplets.Rows.Add(tokens[0], tokens[1], tokens[2]);
-                operacion = $"{tokens[1]} db {tokens[0]}";
-                operacion =
+                code =
 @$"mov ax, {tokens[0]}
 mov bx, {tokens[1]}
 div ax,bx";
@@ -326,7 +342,7 @@ div ax,bx";
             else if (tokens[tokens.Count - 1] == "ASIGN")
             {
                 dtgTriplets.Rows.Add(tokens[0], tokens[1], tokens[2]);
-                operacion = $"{tokens[1]} db {tokens[0]}";
+                code = $"{tokens[1]} db {tokens[0]}";
             }
             else if (tokens[tokens.Count - 1] == "PR-03")
             {
@@ -336,7 +352,7 @@ div ax,bx";
 
                 code =
 @$"mov ax, {tokens[0]}
-{operacion}
+{code}
 cmp ax, {tokens[1]}
 {jump} fin";
             }
@@ -351,7 +367,7 @@ cmp ax, {tokens[1]}
 mov ax, {tokens[0]}
 cmp ax, {tokens[1]}
 {jump} fin
-{operacion}
+{code}
 jmp for";
 
             }
@@ -364,17 +380,12 @@ jmp for";
                 code =
 @$"while:
 mov ax, {tokens[0]}
-{operacion}
+{code}
 cmp ax, {tokens[1]}
 jmp while
 {jump} fin";
 
             }
-
-            /*File.WriteAllText(@"C:\Users\zetin\Downloads\input.asm", txtEnsamblador.Text);
-            string comando1 = @"/c cd C:\Users\zetin\Downloads\ && exec.bat && input.exe > output.txt";
-            System.Diagnostics.Process.Start("CMD.exe", comando1).WaitForExit();
-            txtEnsamblador.Text = File.ReadAllText(@"C:\Users\zetin\Downloads\output.txt");*/
 
             string boilerplate =
 @$"include \masm32\include\masm32rt.inc
@@ -386,11 +397,12 @@ fin:
 end main";
             txtEnsamblador.Text = boilerplate;
 
-            File.WriteAllText(@"C:\Users\zetin\Downloads\input.asm", txtEnsamblador.Text);
+            /*File.WriteAllText(@"C:\Users\zetin\Downloads\input.asm", txtEnsamblador.Text);
             string comando1 = @"/c cd C:\Users\zetin\Downloads\ && exec.bat && input.exe > output.txt";
             System.Diagnostics.Process.Start("CMD.exe", comando1).WaitForExit();
-            txtOutput.Text = File.ReadAllText(@"C:\Users\zetin\Downloads\output.txt");
+            txtOutput.Text = File.ReadAllText(@"C:\Users\zetin\Downloads\output.txt");*/
         }
+
 
         private void CheckParentheses()
         {
@@ -585,6 +597,40 @@ end main";
         {
             txtSourceCode.Select();
             txtLines.DeselectAll();
+        }
+
+        private void ImSorry()
+        {
+            string code="";
+            string[] line;
+            for (int i = 0; i < txtSourceCode.Lines.Length - 1; i++)
+            {
+                line = txtSourceCode.Lines[i].Split(" ");
+                if (line[0] == "if")
+                {
+                    code=
+@$"mov ax, 2
+cmp ax, 2
+je then
+jne fin
+
+then:
+add ax, 4";
+                }
+            }
+            txtEnsamblador.Text =
+@$"include \masm32\include\masm32rt.inc
+.data
+.code
+
+main:
+{code}
+
+imprimir:
+printf(""%d\t"",ax)
+
+fin:
+end main";
         }
 
     }
