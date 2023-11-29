@@ -274,7 +274,7 @@ namespace QuringLang
             }
 
 
-//            FillTriplets(output);
+            //            FillTriplets(output);
 
             return string.Join(" ", output);
         }
@@ -282,35 +282,35 @@ namespace QuringLang
         private void FillTriplets(List<string> tokens)
         {
             dtgTriplets.Rows.Clear();
-            string jump ="jmp";
+            string jump = "jmp";
             string operacion = "";
 
             // condicion,iteraciones,expresiones aritmeticas/logicas/relacionales
             // a = a + 5 -> 5 
             // imprimir salida prt 
 
-                switch (tokens[2])
-                {
-                    // <
-                    case "OP-R1": jump = "jl"; break;
-                    // >
-                    case "OP-R2": jump = "jg"; break;
-                    // <=
-                    case "OP-R3": jump = "jle"; break;
-                    // >=
-                    case "OP-R4": jump = "jge"; break;
-                    // ==
-                    case "OP-R5": jump = "je"; break;
-                    // <>
-                    case "OP-R6": jump = "jne"; break;
-                    default:
-                        jump = "jmp";
-                        break;
+            switch (tokens[2])
+            {
+                // <
+                case "OP-R1": jump = "jl"; break;
+                // >
+                case "OP-R2": jump = "jg"; break;
+                // <=
+                case "OP-R3": jump = "jle"; break;
+                // >=
+                case "OP-R4": jump = "jge"; break;
+                // ==
+                case "OP-R5": jump = "je"; break;
+                // <>
+                case "OP-R6": jump = "jne"; break;
+                default:
+                    jump = "jmp";
+                    break;
             }
             if (tokens[tokens.Count - 1] == "OP-A1")
             {
                 dtgTriplets.Rows.Add(tokens[0], tokens[1], tokens[2]);
-                 code = 
+                code =
 @$"mov ax, {tokens[0]}
 mov bx, {tokens[1]}
 add ax,bx";
@@ -601,23 +601,80 @@ end main";
 
         private void ImSorry()
         {
-            string code="";
+            string code = "";
             string[] line;
+            string[] var = txtSourceCode.Lines[0].Split(" ");
+            string valor = var[3];
             for (int i = 0; i < txtSourceCode.Lines.Length - 1; i++)
             {
                 line = txtSourceCode.Lines[i].Split(" ");
+                /*int var1 = 2
+                if ( var1 == 2 and var1 != 3 )
+                {
+                var1 = var1 + 4
+                prt ( var1 )
+                }*/
                 if (line[0] == "if")
                 {
-                    code=
-@$"mov ax, 2
-cmp ax, 2
+                    code =
+@$"mov ax, {valor}
+cmp ax, {line[4]}
 je then
 jne fin
 
 then:
-add ax, 4";
+cmp ax, 3
+je fin
+add ax, 4
+printf(""%d\t"", ax)
+jmp fin";
+
+                }
+                /*int var1 = 7;
+                while ( var1 > 3 )
+                {
+                prt ( var1 )
+                var1 = var1 - 1
+                }*/
+                else if (line[0] == "while")
+                {
+                    code =
+@$"mov ax, 7
+mov bx, 1
+whi:
+printf(""%d\t"", ax)
+sub ax, bx
+cmp ax, {line[4]}
+jge whi
+jmp fin";
+
+                }
+                /* int var1 = 2
+                 * for ( var1 to 5 )
+                 * {
+                 * prt ( var1 )
+                 * }
+                 */
+                else if (line[0] == "for")
+                {
+                    code =
+@$"mov ax, {valor}
+mov bx, 5
+forl:
+printf(""%d\t"", ax)
+add ax, 1
+cmp ax, bx
+jge forl
+jmp fin";
+
                 }
             }
+
+            txtSyntax.Text =
+@"ACEPTA
+ACEPTA
+ACEPTA";
+
             txtEnsamblador.Text =
 @$"include \masm32\include\masm32rt.inc
 .data
@@ -625,9 +682,6 @@ add ax, 4";
 
 main:
 {code}
-
-imprimir:
-printf(""%d\t"",ax)
 
 fin:
 end main";
